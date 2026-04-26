@@ -1,0 +1,84 @@
+=========================================================
+PANDUAN PEMAHAMAN PROJECT: WEBSITE COMPANY PROFILE
+=========================================================
+Disusun khusus untuk pemula (Basic HTML, CSS, JS)
+Sebagai persiapan Uji Kompetensi / Sidang Dosen
+=========================================================
+
+Halo! Jika kamu sudah paham basic HTML, CSS, dan JS, memahami project ini sebenarnya tidak sulit. Project ini dibuat menggunakan *Framework Laravel*. Bayangkan Laravel ini sebagai sebuah "pabrik" yang sudah menyiapkan kerangka dan alat-bantu supaya kamu tidak perlu menulis kode dari nol.
+
+Berikut adalah hal-hal penting yang HARUS kamu pahami:
+
+---------------------------------------------------------
+1. KONSEP MVC (MODEL - VIEW - CONTROLLER)
+---------------------------------------------------------
+Ini adalah pertanyaan "wajib" yang pasti ditanyakan dosen. Laravel menggunakan arsitektur MVC. Apa itu MVC?
+- M = MODEL: Bagian yang berurusan dengan Database. Kalau kamu mau mengambil, menyimpan, atau mengubah data Artikel, Layanan, atau Galeri ke database, Model-lah yang bertugas. Di project ini, file Model ada di folder `app/Models/`.
+- V = VIEW: Bagian muka atau tampilan (UI). Ini adalah tempat HTML, CSS, dan JS kamu berada. Karena ini Laravel, View menggunakan file berakhiran `.blade.php`. Berada di folder `resources/views/`.
+- C = CONTROLLER: Ini adalah si "Otak" atau "Penengah". Controller bertugas menerima klik/permintaan dari user, lalu meminta data ke Model, dan mengirimkan data tersebut ke View untuk ditampilkan menjadi HTML utuh. Filenya ada di `app/Http/Controllers/`.
+
+Contoh Alur: 
+User buka halaman Home -> Controller (PublicController) aktif -> Minta data layanan & artikel terbaru ke Model -> Setelah dapat datanya, Controller mengirim data itu ke View (`home.blade.php`) -> View mengubahnya menjadi HTML -> Tampil di layar User.
+
+
+---------------------------------------------------------
+2. STRUKTUR FOLDER YANG SERING DITANYAKAN
+---------------------------------------------------------
+Dosen sering menyuruh: "Coba buka file kodingan halaman utamanya!"
+- Folder `routes/web.php`: Ini ibarat "Buku Alamat". Semua URL (seperti /home, /gallery, /contact) didefinisikan di sini. URL akan mengarahkan sistem ke Controller mana yang bertugas.
+- Folder `resources/views/`: Tempat semua tampilan frontend (HTML/CSS).
+  - `resources/views/layouts/public.blade.php`: Ini file MASTER HTML-nya. Navbar (menu atas) dan Footer ada di sini. Jadi tidak perlu mengulang nulis navbar di setiap halaman.
+  - `resources/views/home.blade.php`: Ini kodingan untuk isi Halaman Utama.
+  - `resources/views/admin/`: Folder khusus untuk tampilan halaman Dasbor Admin.
+- Folder `app/Http/Controllers/`: Tempat logika pemrosesan.
+- Folder `database/migrations/`: Tempat file "blueprint" untuk membuat tabel di Database tanpa perlu buka PHPMyAdmin manual.
+
+
+---------------------------------------------------------
+3. TEKNOLOGI FRONTEND YANG DIPAKAI (SANGAT PENTING!)
+---------------------------------------------------------
+Karena kamu paham basic HTML/CSS, dosen mungkin tanya kenapa class HTML-nya aneh-aneh dan panjang (misal: class="bg-blue-600 text-white flex rounded-lg").
+- TAILWIND CSS: Kita tidak menggunakan file CSS biasa (style.css). Kita menggunakan Tailwind CSS. Ini adalah framework CSS di mana styling ditulis langsung sebagai "class" di dalam tag HTML. Mempercepat proses desain tanpa perlu bolak-balik buka file CSS.
+- BLADE TEMPLATE: Di dalam file `.blade.php`, kamu akan melihat kode seperti `{{ $data }}` atau `@if` dan `@foreach`. Ini adalah fitur Laravel untuk menyisipkan data dari database ke dalam HTML secara otomatis. 
+- ALPINE.JS: Ini ibarat pengganti JavaScript/jQuery yang sangat ringan. Di HTML, kamu akan melihat atribut seperti `x-data`, `x-show`, atau `@click`. Fungsinya untuk membuat interaksi simpel (seperti buka/tutup menu HP atau modal pop-up galeri) tanpa nulis file JS yang panjang.
+- AOS (Animate on Scroll): Library pihak ketiga untuk bikin gambar/teks muncul dengan efek animasi saat web di-*scroll* ke bawah (biasanya ditandai dengan kode `data-aos="fade-up"` di tag div).
+
+
+---------------------------------------------------------
+4. SISTEM DATABASE (CRUD)
+---------------------------------------------------------
+Dosen pasti bertanya soal CRUD (Create, Read, Update, Delete).
+Project ini punya dua sisi:
+1. Sisi Admin (Backend): Disinilah CRUD utuh terjadi. Admin bisa Create (Tambah data galeri/artikel), Read (Melihat daftar data), Update (Edit info), dan Delete (Hapus data).
+2. Sisi Publik (Frontend): Halaman yang dilihat client. Di sini sistem mayoritas hanya melakukan fungsi READ (menarik data yang diinput admin lalu menampilkannya di halaman home/layanan/artikel).
+
+
+---------------------------------------------------------
+5. SIMULASI PERTANYAAN DOSEN & CARA MENJAWABNYA
+---------------------------------------------------------
+P: "Website ini dibikin pakai bahasa dan framework apa saja?"
+J: "Backend pakai bahasa PHP dengan framework Laravel. Frontend menggunakan HTML yang dirender lewat Laravel Blade, styling desain menggunakan Tailwind CSS, interaktivitas ringan menggunakan Alpine.js, dan animasi pakai AOS."
+
+P: "Coba tunjukkan di mana kamu mengatur warna font, gradient, dan layout menu secara keseluruhan!"
+J: (Kamu buka file `resources/views/layouts/public.blade.php`). "Semuanya ada di file layout master ini, Pak/Bu. Navbar dan footer ada disini, dan konfigurasi tema Tailwind CSS-nya juga saya sisipkan di bagian atas tag <head>."
+
+P: "Gimana caranya satu komponen (misalnya list artikel) bisa muncul banyak padahal kode HTML-nya di file ini cuma sedikit?"
+J: "Itu menggunakan konsep perulangan dari Blade, Pak/Bu. Menggunakan tag `@forelse` atau `@foreach`. Datanya ditangkap dari database oleh Controller, lalu di-looping (diulang) oleh Blade View sehingga tag HTML akan dicetak sebanyak jumlah data yang ada di database."
+
+P: "Apa bedanya .html biasa dengan .blade.php?"
+J: ".blade.php adalah Template Engine milik Laravel. Kalau HTML biasa bersifat statis (tidak bisa membaca variabel PHP langsung). Tapi Blade bisa membaca variabel dari PHP, memiliki fitur keamanan (menghindari serangan XSS), dan mendukung fitur extends/include agar kode HTML tidak perlu diketik ulang (seperti pemisahan navbar dan footer)."
+
+P: "Dimana kamu menyimpan logika untuk menangkap form 'Hubungi Kami'?"
+J: "Jika ada form yang disubmit, itu akan mengarah ke route tertentu, lalu diarahkan ke Controller (seperti ContactController/PublicController). Di Controller itulah kode untuk menyimpan data atau mengirim email ditulis."
+
+
+---------------------------------------------------------
+TIPS TERAKHIR SEBELUM MAJU UJI KOMPETENSI / SIDANG:
+---------------------------------------------------------
+1. Buka dan hapalkan letak folder `resources/views` (tempat UI) dan `app/Http/Controllers` (tempat logika).
+2. Jangan panik saat ditanya kode Tailwind yang panjang. Bilang saja "Itu adalah *utility classes* dari Tailwind CSS, Pak. `bg-white` untuk background putih, `rounded-xl` untuk border radius, dan seterusnya."
+3. Hapal alur ini: 
+   User Klik URL -> Route ngecek -> Controller kerja -> Ambil Data ke Model -> Data dikasih ke View -> Tampil di Browser.
+
+Semoga berhasil! Tetap tenang dan kuasai materi basic ini.
+=========================================================
